@@ -8,7 +8,7 @@
         name: python3-pip
         state: present
     - name: Install proxmoxer
-      ansible.builtin.apt:
+      ansible.builtin.shell:
         cmd: "pip3 install proxmoxer"
     - name: Set VM Name
       set_fact:
