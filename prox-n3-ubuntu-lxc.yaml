@@ -3,26 +3,31 @@
   vars:
     container_name: ubuntu
   tasks:
+    - name: community.general
+        src: https://galaxy.ansible.com/api/v2/collections/community/general
+        version: present  # Specify the desired version
+
+
     - set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
     
-    - ansible.builtin.proxmox_kvm:
+    - proxmox_lxc:
         api_user: root@pam
-        api_password: PASSWORD
-        api_host: 10.70.7.73
-        clone: ubuntutemplate  # The LXC source
+        api_password: 9925408
+        api_host: 10.10.0.30
+        clone: UbuntuTemplate  # The LXC source
         name: "{{ yeppers }}"  # The target LXC container name
-        node: proxmox
+        node: NODE3
         storage: local-lvm
         timeout: 500  # Note: The task can take a while. Adapt
     
     - name: start LXC container
-      ansible.builtin.proxmox_kvm:
+      proxmox_lxc:
         api_user: root@pam
         api_password: PASSWORD
-        api_host: 10.70.7.73
+        api_host: 10.10.0.30
         name: "{{ yeppers }}"
-        node: proxmox
+        node: NODE3
         state: started
     
     - name: get LXC container ID
@@ -47,7 +52,7 @@
     
     - name: Slack Notification
       community.general.slack:
-        token: TOKzQzYzg1NWYzYTIxMjMzZTI2YzljZmRhZDJkYzZjMWFhNTMyZjE3MGYwMQ8a2254b648b25a9e355f508ab2ef5fcbEN
+        token: zQzYzg1NWYzYTIxMjMzZTI2YzljZmRhZDJkYzZjMWFhNTMyZjE3MGYwMQ8a2254b648b25a9e355f508ab2ef5fcb
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
