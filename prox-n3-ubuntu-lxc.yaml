@@ -15,6 +15,17 @@
         name: python3-proxmoxer
         state: present
 
+    - name: Upload OSTemplate
+      community.general.proxmox_template:
+        api_host: 10.10.0.30
+        api_user: root@pam
+        api_password: 9925408
+        node: NODE3
+        storage: local
+        src: /var/lib/vz/template/cache/ubuntu-23.04-standard_23.04-1_amd64.tar.gz
+        force: yes
+
+
     - name: Set LXC Container Name
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
