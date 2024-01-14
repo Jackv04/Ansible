@@ -1,0 +1,78 @@
+---
+- name: Proxmox LXC stuff
+  hosts: 10.10.0.30
+  vars:
+    name: ubuntu
+  become: true
+  tasks:
+    - name: Install pip3
+      ansible.builtin.package:
+        name: python3-pip
+        state: present
+
+    - name: Install proxmoxer
+      ansible.builtin.apt:
+        name: python3-proxmoxer
+        state: present
+
+    - name: Set LXC Container Name
+      set_fact:
+        yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
+
+    - name: Create LXC Container
+      proxmox_lxc:
+        api_user: root@pam
+        api_password: 9925408
+        api_host: 10.10.0.30
+        node: NODE3
+        storage: local-lvm
+        password: 9925408  # Set the desired root password for the container
+        ostemplate: local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.gz  # Set the desired OS template
+        vmid: "{{ yeppers }}"  # The target LXC container ID
+        hostname: "{{ yeppers }}"  # The hostname of the LXC container
+        memory: 1024  # Set the desired memory for the container
+        cores: 2  # Set the desired number of CPU cores for the container
+        netif: name=eth0,bridge=vmbr0,ip=dhcp  # Set the network interface configuration
+
+    - name: Start LXC Container
+      proxmox_lxc:
+        api_user: root@pam
+        api_password: 9925408
+        api_host: 10.10.0.30
+        node: NODE3
+        vmid: "{{ yeppers }}"
+        state: started
+
+    - name: Get LXC Container IP Address
+      proxmox_lxc_info:
+        api_user: root@pam
+        api_password: 9925408
+        api_host: 10.10.0.30
+        node: NODE3
+        vmid: "{{ yeppers }}"
+      register: lxc_info
+
+    - name: Debug LXC Container IP Address
+      debug:
+        var: lxc_info.ip_address
+
+    - name: Pause for 5 minutes to build app cache
+      ansible.builtin.pause:
+        minutes: 5
+
+    - name: Slack Notification
+      community.general.slack:
+        token: zQzYzg1NWYzYTIxMjMzZTI2YzljZmRhZDJkYzZjMWFhNTMyZjE3MGYwMQ8a2254b648b25a9e355f508ab2ef5fcb
+        msg: |
+          ### Your LXC Container is READY!! ###
+          --------------------------------------
+          'Container': "{{ yeppers }}"
+          'IP ADDRESS': "{{ lxc_info.ip_address }}"
+          'URL': ssh://networkchuck@{{ lxc_info.ip_address }}
+          --------------------------------------
+        channel: '#ansible'
+        color: good
+        username: 'Ansible on {{ inventory_hostname }}'
+        link_names: 0
+        parse: 'none'
+      ignore_errors: true
