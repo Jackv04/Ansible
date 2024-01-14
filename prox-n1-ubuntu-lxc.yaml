@@ -2,14 +2,16 @@
   hosts: 10.10.0.30
   vars:
     name: ubuntu
+  become: true
   tasks:
-    - name: Install pip3
+    - name: Install pip
       ansible.builtin.package:
-        name: python3-pip
+        name: python-pip
         state: present
     - name: Install proxmoxer
-      ansible.builtin.shell:
-        cmd: "pip3 install proxmoxer"
+      ansible.builtin.pip:
+        name: proxmoxer
+        state: present
     - name: Set VM Name
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
