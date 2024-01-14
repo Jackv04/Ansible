@@ -21,7 +21,7 @@
 
     - name: Create LXC Container
       community.general.proxmox:
-        api_host: 10.10.0.30  # Replace with your Proxmox host IP
+        api_host: 10.10.0.30
         api_user: root@pam
         api_password: 9925408
         hostname: NODE3
@@ -30,9 +30,12 @@
         state: present
         ostemplate: local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.zst
         storage: local-lvm
-        password: root_password_for_container
+        password: 9925408
         onboot: true
         netif: name=eth0,bridge=vmbr0,ip=dhcp
+        cores: 2
+        memory: 1024
+        # Add other required parameters based on your needs
 
     - name: Pause for 5 minutes to build app cache
       ansible.builtin.pause:
