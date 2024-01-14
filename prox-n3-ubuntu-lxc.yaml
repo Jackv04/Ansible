@@ -1,81 +1,59 @@
----
-- name: Proxmox LXC stuff
-  hosts: 10.10.0.30
+- name: Proxmox LXC Cloning
+  hosts: all
   vars:
-    name: ubuntu
-  become: true
+    container_name: ubuntu
   tasks:
-    - name: Install pip3
-      ansible.builtin.package:
-        name: python3-pip
-        state: present
-
-    - name: Install proxmoxer
-      ansible.builtin.apt:
-        name: python3-proxmoxer
-        state: present
-
-    - name: Upload OSTemplate
-      community.general.proxmox_template:
-        api_host: 10.10.0.30
-        api_user: root@pam
-        api_password: 9925408
-        node: NODE3
-        storage: local
-        src: /var/lib/vz/template/cache/ubuntu-23.04-standard_23.04-1_amd64.tar.zst
-        force: yes
-
-
-    - name: Set LXC Container Name
-      set_fact:
+    - set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
-
-    - name: 'Create LXC Container'
-      proxmox:
-        api_user: root@pam # Proxmox user
-        api_password: 9925408 # Password in plaintext !!!
-        api_host: 10.10.0.30 # Proxmox hostname
-        password: '9925408' # Password in plaintext !!!
-        hostname: "{{ yeppers}}" # Container hostname
-        node: 'NODE3' # Name of Proxmox host
-        cores: '2'
-        cpus: '2'
-        cpuunits: '1000'
-        ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.zst' # Or use local:vztmpl/...
-        storage: 'local' # Or use 'local'
-        disk: '8'
-        memory: '1024'
-        netif: '{"net0":"name=eth0,ip=dhcp,ip6=dhcp,bridge=vmbr0"}'
-        state: 'present'
-
-
-    - name: Pause for 5 minutes to build app cache
-      ansible.builtin.pause:
-        minutes: 5
-
-    - name: Get LXC Container IP Address
-      community.general.proxmox:
-        api_host: 10.10.0.30
+    
+    - proxmox_lxc:
         api_user: root@pam
         api_password: 9925408
+        api_host: 10.10.0.30
+        clone: UbuntuTemplate  # The LXC source
+        name: "{{ yeppers }}"  # The target LXC container name
         node: NODE3
-        vmid: "{{ yeppers | int }}"
-        command: query
-      register: lxc_info
-
-    - name: Debug LXC Container IP Address
+        storage: local-lvm
+        timeout: 500  # Note: The task can take a while. Adapt
+    
+    - name: start LXC container
+      proxmox_lxc:
+        api_user: root@pam
+        api_password: PASSWORD
+        api_host: 10.10.0.30
+        name: "{{ yeppers }}"
+        node: NODE3
+        state: started
+    
+    - name: get LXC container ID
+      shell: pct list | grep "{{ yeppers }}" | awk '{ print $1 }'
+      register: thelxcid
+    
+    - name: debug LXC container ID
       debug:
-        var: lxc_info.network.eth0.ip
-
+        var: thelxcid.stdout 
+    
+    - name: Pause for 1 minute to build app cache
+      ansible.builtin.pause:
+        minutes: 1
+    
+    - name: get LXC container IP
+      shell: pct exec "{{ thelxcid.stdout }}" -- ip a show dev eth0 | grep -oP 'inet \K\S+'
+      register: theip
+    
+    - name: debug LXC container IP
+      debug:
+        var: theip.stdout
+    
     - name: Slack Notification
       community.general.slack:
         token: zQzYzg1NWYzYTIxMjMzZTI2YzljZmRhZDJkYzZjMWFhNTMyZjE3MGYwMQ8a2254b648b25a9e355f508ab2ef5fcb
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
-          'Container': "{{ yeppers }}"
-          'IP ADDRESS': "{{ lxc_info.network.eth0.ip }}"
-          'URL': ssh://networkchuck@{{ lxc_info.network.eth0.ip }}
+          `Container`: "{{ yeppers }}"
+          `IP ADDRESS`: "{{ theip.stdout }}"
+          'URL': ssh://user@{{ theip.stdout }}
           --------------------------------------
         channel: '#ansible'
         color: good
