@@ -11,7 +11,7 @@
       proxmox_kvm:
         api_user: root@pam
         api_password: 9925408
-        api_host: 10.10.0.30
+        api_host: 10.10.0.10
         clone: UbuntuTemplate   # The VM source
         name: "{{ yeppers }}"  # The target VM name
         node: NODE3
@@ -23,7 +23,7 @@
       proxmox_kvm:
         api_user: root@pam
         api_password: 9925408
-        api_host: 10.10.0.30
+        api_host: 10.10.0.10
         name: "{{ yeppers }}"
         node: NODE3
         state: started
