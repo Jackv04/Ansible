@@ -25,6 +25,7 @@
         api_host: 10.10.0.30  # Replace with your Proxmox host IP
         api_user: root@pam
         nodes: NODE3
+        node: NODE3
         hostname: NODE3
         vmid: "{{ yeppers | int }}"
         name: "{{ yeppers }}"
