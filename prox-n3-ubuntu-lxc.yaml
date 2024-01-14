@@ -21,21 +21,21 @@
 
     - name: 'Create LXC Container'
       proxmox
-          api_user: root # Proxmox user
-          api_password: 9925408 # Password in plaintext !!!
-          api_host: 10.10.0.30 # Proxmox hostname
-          password: '9925408' # Password in plaintext !!!
-          hostname: "{{ yeppers}}" # Container hostname
-          node: 'NODE3' # Name of Proxmox host
-          cores: '2'
-          cpus: '2'
-          cpuunits: '1000'
-          ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.gz' # Or use local:vztmpl/...
-          storage: 'local' # Or use 'local'
-          disk: '8'
-          memory: '1024'
-          netif: '{"net0":"name=eth0,ip=dhcp,ip6=dhcp,bridge=vmbr0"}'
-          state: 'present'
+        api_user: root # Proxmox user
+        api_password: 9925408 # Password in plaintext !!!
+        api_host: 10.10.0.30 # Proxmox hostname
+        password: '9925408' # Password in plaintext !!!
+        hostname: "{{ yeppers}}" # Container hostname
+        node: 'NODE3' # Name of Proxmox host
+        cores: '2'
+        cpus: '2'
+        cpuunits: '1000'
+        ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.gz' # Or use local:vztmpl/...
+        storage: 'local' # Or use 'local'
+        disk: '8'
+        memory: '1024'
+        netif: '{"net0":"name=eth0,ip=dhcp,ip6=dhcp,bridge=vmbr0"}'
+        state: 'present'
 
 
     - name: Pause for 5 minutes to build app cache
