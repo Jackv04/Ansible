@@ -3,6 +3,9 @@
   vars:
     name: ubuntu
   tasks:
+    - name: Install Pip && Proxmoxer
+      ansible.builtin.shell:
+        cmd: "apt install pip3 && pip3 install proxmoxer"
     - name: Set VM Name
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
