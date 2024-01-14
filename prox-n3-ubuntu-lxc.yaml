@@ -27,9 +27,9 @@
         hostname: NODE3
         node: NODE3
         vmid: "{{ yeppers | int }}"
-        state: present
+        state: present'content_type vztmpl
         template: ubuntu-23.04-standard_23.04-1_amd64.tar.zst
-        storage: local-lvm
+        storage: local
         password: 9925408
         onboot: true
         netif: name=eth0,bridge=vmbr0,ip=dhcp
