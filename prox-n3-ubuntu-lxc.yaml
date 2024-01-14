@@ -21,7 +21,7 @@
 
     - name: 'Create LXC Container'
       proxmox:
-        api_user: root # Proxmox user
+        api_user: root@pam # Proxmox user
         api_password: 9925408 # Password in plaintext !!!
         api_host: 10.10.0.30 # Proxmox hostname
         password: '9925408' # Password in plaintext !!!
