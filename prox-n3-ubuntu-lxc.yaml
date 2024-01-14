@@ -29,7 +29,7 @@
         name: "{{ yeppers }}"
         ostemplate: local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.gz
         storage: local-lvm
-        password: 9925408
+        api_password: 9925408
         net0: name=eth0,bridge=vmbr0,ip=dhcp
 
     - name: Start LXC Container
