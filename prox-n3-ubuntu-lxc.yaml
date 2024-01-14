@@ -15,10 +15,6 @@
         name: python3-proxmoxer
         state: present
 
-    - name: Check Proxmoxer
-      ansible.builtin.shell:
-        cmd: "proxmoxer --version"
-
     - name: Set LXC Container Name
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
