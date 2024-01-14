@@ -4,15 +4,13 @@
     name: ubuntu
   become: true
   tasks:
-    - name: Install and upgrade pip
-      pip:
-        name: pip
-        extra_args: --upgrade
-    - name: Install proxmoxer
-      ansible.builtin.pip:
-        name: proxmoxer
+    - name: Install pip3
+      ansible.builtin.package:
+        name: python-pip3
         state: present
-        executable: pip3
+    - name: Install proxmoxer
+      ansible.builtin.shell:
+        cmd: "pip3 install proxmoxer"
     - name: Set VM Name
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
