@@ -55,9 +55,9 @@
         msg:
           ### Your Server is READY!! ###
           --------------------------------------
-          ``
-          `Server`: "{{ yeppers }}"
-          `IP ADDRESS`: "{{ theip.stdout}}"
+          ''
+          'Server': "{{ yeppers }}"
+          'IP ADDRESS': "{{ theip.stdout}}"
           'URL': ssh://networkchuck@{{ theip.stdout }}
           --------------------------------------
         channel: '#ansible'
