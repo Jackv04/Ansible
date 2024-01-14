@@ -22,6 +22,8 @@
     - name: Create LXC Container
       community.general.proxmox:
         command: create
+        host: 10.10.0.30  # Replace with your Proxmox host IP
+        user: root@pam
         nodes: NODE3
         vmid: "{{ yeppers }}"
         name: "{{ yeppers }}"
