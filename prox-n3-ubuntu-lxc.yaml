@@ -1,12 +1,10 @@
 - name: Proxmox LXC Cloning
-  hosts: all
+  hosts: 10.10.0.30
   vars:
     container_name: ubuntu
   tasks:
-    - name: community.general
-        src: https://galaxy.ansible.com/api/v2/collections/community/general
-        version: present  # Specify the desired version
-
+    - name: Install community.general collection
+      ansible.builtin.command: ansible-galaxy collection install community.general
 
     - set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
