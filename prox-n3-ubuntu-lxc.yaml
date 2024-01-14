@@ -22,7 +22,7 @@
         api_password: 9925408
         node: NODE3
         storage: local
-        src: /var/lib/vz/template/cache/ubuntu-23.04-standard_23.04-1_amd64.tar.gz
+        src: /var/lib/vz/template/cache/ubuntu-23.04-standard_23.04-1_amd64.tar.zst
         force: yes
 
 
@@ -41,7 +41,7 @@
         cores: '2'
         cpus: '2'
         cpuunits: '1000'
-        ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.gz' # Or use local:vztmpl/...
+        ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.zst' # Or use local:vztmpl/...
         storage: 'local' # Or use 'local'
         disk: '8'
         memory: '1024'
