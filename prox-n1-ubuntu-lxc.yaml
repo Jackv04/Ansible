@@ -9,8 +9,9 @@
         name: python3-pip
         state: present
     - name: Install proxmoxer
-      ansible.builtin.shell:
-        cmd: "pip install proxmoxer"
+      ansible.builtin.apt:
+        name: python3-proxmoxer
+        state: present
     - name: Set VM Name
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
