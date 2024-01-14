@@ -20,41 +20,36 @@
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
     - name: Create LXC Container
-      community.general.proxmox_kvm:
-        api_user: root@pam
-        api_password: 9925408
-        api_host: 10.10.0.30
-        node: NODE3
-        storage: local-lvm
-        clone: local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.gz
+      community.general.proxmox:
+        command: create
+        nodes: NODE3
+        vmid: "{{ yeppers }}"
         name: "{{ yeppers }}"
-        net: name=eth0,bridge=vmbr0,ip=dhcp
+        ostemplate: local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.gz
+        storage: local-lvm
+        password: 9925408
+        net0: name=eth0,bridge=vmbr0,ip=dhcp
 
     - name: Start LXC Container
-      community.general.proxmox_kvm:
-        api_user: root@pam
-        api_password: 9925408
-        api_host: 10.10.0.30
-        node: NODE3
-        name: "{{ yeppers }}"
-        state: started
-
-    - name: Get LXC Container IP Address
-      community.general.proxmox_kvm_info:
-        api_user: root@pam
-        api_password: 9925408
-        api_host: 10.10.0.30
-        node: NODE3
-        name: "{{ yeppers }}"
-      register: lxc_info
-
-    - name: Debug LXC Container IP Address
-      debug:
-        var: lxc_info.ansible_facts.proxmox_kvm_info[0].ip_address
+      community.general.proxmox:
+        command: start
+        nodes: NODE3
+        vmid: "{{ yeppers }}"
 
     - name: Pause for 5 minutes to build app cache
       ansible.builtin.pause:
         minutes: 5
+
+    - name: Get LXC Container IP Address
+      community.general.proxmox:
+        command: query
+        nodes: NODE3
+        vmid: "{{ yeppers }}"
+      register: lxc_info
+
+    - name: Debug LXC Container IP Address
+      debug:
+        var: lxc_info.network.eth0.ip
 
     - name: Slack Notification
       community.general.slack:
@@ -63,8 +58,8 @@
           ### Your LXC Container is READY!! ###
           --------------------------------------
           'Container': "{{ yeppers }}"
-          'IP ADDRESS': "{{ lxc_info.ansible_facts.proxmox_kvm_info[0].ip_address }}"
-          'URL': ssh://networkchuck@{{ lxc_info.ansible_facts.proxmox_kvm_info[0].ip_address }}
+          'IP ADDRESS': "{{ lxc_info.network.eth0.ip }}"
+          'URL': ssh://networkchuck@{{ lxc_info.network.eth0.ip }}
           --------------------------------------
         channel: '#ansible'
         color: good
