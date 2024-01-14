@@ -25,7 +25,7 @@
         api_host: 10.10.0.30  # Replace with your Proxmox host IP
         api_user: root@pam
         nodes: NODE3
-        vmid: "{{ yeppers }}"
+        vmid: "{{ yeppers | int }}"
         name: "{{ yeppers }}"
         ostemplate: local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.gz
         storage: local-lvm
