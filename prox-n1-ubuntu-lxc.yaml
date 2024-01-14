@@ -8,7 +8,6 @@
       pip:
         name: pip
         extra_args: --upgrade
-        executable: pip3
     - name: Install proxmoxer
       ansible.builtin.pip:
         name: proxmoxer
