@@ -52,6 +52,7 @@
     - name: Slack Notification
       community.general.slack:
         token: zQzYzg1NWYzYTIxMjMzZTI2YzljZmRhZDJkYzZjMWFhNTMyZjE3MGYwMQ8a2254b648b25a9e355f508ab2ef5fcb
+        msg:
           ### Your Server is READY!! ###
           --------------------------------------
           ``
