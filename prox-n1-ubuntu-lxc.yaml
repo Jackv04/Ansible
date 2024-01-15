@@ -15,7 +15,7 @@
         msg: "Configured settings - Node: {{ node }}, Host: {{ host }}, Cloneid: {{ cloneid }}"
       
 - name: Proxmox LXC Cloning
-  hosts: host
+  hosts: "{{ host }}"
   tasks:
     - name: Determine Hostname
       set_fact:
