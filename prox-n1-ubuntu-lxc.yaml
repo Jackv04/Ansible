@@ -7,7 +7,7 @@
   hosts: 10.10.0.10
   env:
     PASSWORD: ${{ secrets.NODE_PASSWORD }}
-    TOKEN: ${{ secrets.ANSIBLESLACKTOKEN}}
+    TOKEN: ${{ secrets.ANSIBLESLACKTOKEN }}
   vars:
     container_name: ubuntu
   tasks:
