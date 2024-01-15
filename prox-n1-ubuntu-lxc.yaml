@@ -8,23 +8,44 @@
   vars:
     container_name: ubuntu
     node_choice: "{{ NODE_CHOICE }}"
-  hosts: node{{ NODE_CHOICE }}
+  hosts: localhost
   tasks:
-    - name: Debug node_choice
-      debug:
-        var: node_choice
+    - name: Set variables based on node choice
+      set_fact:
+        clone_id: >-
+          {% if node_choice == 1 %}
+            104
+          {% elif node_choice == 2 %}
+            102
+          {% elif node_choice == 3 %}
+            101
+          {% else %}
+            100  # Default value if node_choice is not 1, 2, or 3
+          {% endif %}
+        proxmox_node: "node{{ node_choice }}"
+        api_host: >-
+          {% if node_choice == 1 %}
+            10.10.0.10
+          {% elif node_choice == 2 %}
+            10.10.0.20
+          {% elif node_choice == 3 %}
+            10.10.0.30
+          {% else %}
+            127.0.0.1  # Default value if node_choice is not 1, 2, or 3
+          {% endif %}
 
+    - name: Add proxmox_node to temporary inventory
+      add_host:
+        name: "{{ proxmox_node }}"
+        ansible_host: "{{ api_host }}"
+      run_once: true
 
+- name: Proxmox LXC Cloning
+  hosts: "node{{ node_choice }}"
+  tasks:
     - name: Determine Hostname
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
-
-    - name: Set variables based on node choice
-      set_fact:
-        clone_id: "{{ {1: 104, 2: 102, 3: 101}[node_choice] }}"
-        proxmox_node: "{{ {1: 'node1', 2: 'node2', 3: 'node3'}[node_choice] }}"
-        api_host: "{{ {1: '10.10.0.10', 2: '10.10.0.20', 3: '10.10.0.30'}[node_choice] }}"
-
         
     - name: Get existing LXC container IDs on NODE1
       shell: pct list | awk '{print $1}' || true
