@@ -1,13 +1,17 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
-    # semaphore_CHOSEN NODE
-    # semaphore_CHOSEN HOSTNAME
+
+  vars:
+    NODE_CHOICE: "{{ semaphore_CHOSEN NODE}}"
+    HOSTNAME_CHOICE: "{{ semaphore_CHOSEN HOSTNAME}}"
+
+
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 
 - name: Proxmox LXC Cloning
-  hosts: "{{ semaphore_CHOSEN NODE }}"
+  hosts: "{{ NODE_CHOICE }}"
   vars:
     container_name: ubuntu
   tasks:
@@ -34,8 +38,8 @@
         node: NODE3
         api_user: root@pam
         api_password: 9925408
-        api_host: "{{ semaphore_CHOSEN NODE }}"
-        hostname: "{{ semaphore_CHOSEN HOSTNAME }}"
+        api_host: "{{ NODE_CHOICE }}"
+        hostname: "{{ HOSTNAME_CHOICE }}"
         clone: 101
         storage: local
         timeout: 180
@@ -44,13 +48,13 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: 9925408
-        api_host: "{{ semaphore_CHOSEN NODE }}"
+        api_host: "{{ NODE_CHOICE }}"
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: NODE3
         state: started
 
     - name: get LXC container ID
-      shell: pct list | grep "{{ semaphore_CHOSEN HOSTNAME }}" | awk '{ print $1 }'
+      shell: pct list | grep "{{ HOSTNAME_CHOICE }}" | awk '{ print $1 }'
       register: thelxcid
 
     - name: debug LXC container ID
@@ -75,7 +79,7 @@
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
-          `Container`: "{{ semaphore_CHOSEN HOSTNAME }}"
+          `Container`: "{{ HOSTNAME_CHOICE }}"
           {% if theip is defined %}
           `IP ADDRESS`: "{{ theip.stdout }}"
           'URL': ssh://user@{{ theip.stdout }}
