@@ -8,7 +8,7 @@
   vars:
     container_name: ubuntu
     node_choice: "{{ NODE_CHOICE }}"
-  hosts: "{{ lookup('vars', 'proxmox_node') }}"
+  hosts: node"{{ NODE_CHOICE }}
   tasks:
     - name: Determine Hostname
       set_fact:
