@@ -41,6 +41,8 @@
         hostname: "{{ yeppers }}"
         clone: 101
         storage: local
+      when: existing_lxc_ids is defined and existing_lxc_ids.stdout_lines | default([]) | length > 0
+
 
     - name: start LXC container
       community.general.proxmox:
