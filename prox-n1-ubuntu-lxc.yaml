@@ -41,9 +41,9 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: "{{ NODE_CHOICE }}"
+        api_host: "{{ 10.10.0.10 if NODE_CHOICE == '1' else (10.10.0.20 if NODE_CHOICE == '2' else (10.10.0.30 if NODE_CHOICE == '3')) }}"
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
-        node: NODE1
+        node: "{{ node1 if NODE_CHOICE == '1' else (node2 if NODE_CHOICE == '2' else (node3 if NODE_CHOICE == '3')) }}"
         state: started
 
     - name: get LXC container ID
