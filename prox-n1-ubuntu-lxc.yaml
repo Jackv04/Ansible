@@ -40,6 +40,13 @@
       run_once: true
 
 - name: Proxmox LXC Cloning
+  hosts: localhost
+  tasks:
+    - name: Set proxmox_node variable for the second play
+      set_fact:
+        proxmox_node: "{{ proxmox_node }}"
+
+- name: Proxmox LXC Cloning
   hosts: "{{ proxmox_node }}"
   tasks:
     - name: Determine Hostname
