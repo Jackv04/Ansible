@@ -8,16 +8,17 @@
   hosts: "{{ proxmox_node }}"
   vars:
     container_name: ubuntu
+    node_choice: "{{ NODE_CHOICE }}"
   tasks:
     - name: Determine Hostname
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
-    - name: Set variables based on survey choice
+    - name: Set variables based on node choice
       set_fact:
-        clone_id: "{{ {1: 104, 2: 102, 3: 101}[survey_choice] }}"
-        proxmox_node: "{{ {1: 'node1', 2: 'node2', 3: 'node3'}[survey_choice] }}"
-        api_host: "{{ {1: '10.10.0.10', 2: '10.10.0.20', 3: '10.10.0.30'}[survey_choice] }}"
+        clone_id: "{{ {1: 104, 2: 102, 3: 101}[node_choice] }}"
+        proxmox_node: "{{ {1: 'node1', 2: 'node2', 3: 'node3'}[node_choice] }}"
+        api_host: "{{ {1: '10.10.0.10', 2: '10.10.0.20', 3: '10.10.0.30'}[node_choice] }}"
     - name: clone_id
       debug:
         var: clone_id
