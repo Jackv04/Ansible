@@ -68,7 +68,7 @@
 
     - name: Slack Notification
       community.general.slack:
-        token: zQzYzg1NWYzYTIxMjMzZTI2YzljZmRhZDJkYzZjMWFhNTMyZjE3MGYwMQ8a2254b648b25a9e355f508ab2ef5fcb
+        token: xapp-1-A06E77RHNPK-6465073048550-12569a15e13881fbaee3491cdaaf104e9acd808db1c37847c9b5a5bf5aa6aec6
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
