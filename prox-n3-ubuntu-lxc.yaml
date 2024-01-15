@@ -21,9 +21,9 @@
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
-        password: 9925408
         hostname: "{{ yeppers }}"
-        ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64'  # Specify the OS template you want to use
+        clone: 101
+        storage: local
 
     - name: start LXC container
       community.general.proxmox:
