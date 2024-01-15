@@ -5,49 +5,13 @@
       ansible.builtin.command: ansible-galaxy collection install community.general
       
 - name: Proxmox LXC Cloning
+  hosts: localhost
   vars:
-    container_name: ubuntu
     node_choice: "{{ NODE_CHOICE }}"
-    clone_id: 100  # Default value
-    proxmox_node: "node{{ node_choice | default(0) }}"
-    api_host: "127.0.0.1"  # Default value
-  hosts: localhost
-  tasks:
-    - name: Set variables based on node choice
-      set_fact:
-        clone_id: >-
-          {% if node_choice == 1 %}
-            104
-          {% elif node_choice == 2 %}
-            102
-          {% elif node_choice == 3 %}
-            101
-          {% endif %}
-        proxmox_node: "node{{ node_choice }}"
-        api_host: >-
-          {% if node_choice == 1 %}
-            10.10.0.10
-          {% elif node_choice == 2 %}
-            10.10.0.20
-          {% elif node_choice == 3 %}
-            10.10.0.30
-          {% endif %}
-
-    - name: Add proxmox_node to temporary inventory
-      add_host:
-        name: "{{ proxmox_node }}"
-        ansible_host: "{{ api_host }}"
-      run_once: true
-
-- name: Proxmox LXC Cloning
-  hosts: localhost
-  tasks:
-    - name: Set proxmox_node variable for the second play
-      set_fact:
-        proxmox_node: "{{ proxmox_node }}"
-
-- name: Proxmox LXC Cloning
-  hosts: "{{ proxmox_node }}"
+    proxmox_node: "node{{ node_choice }}"
+    api_host: "{{ '10.10.0.' ~ node_choice }}"
+    clone_id: "{{ {1: 104, 2: 102, 3: 101}[node_choice] }}"
+    hosts: "{{ proxmox_node }}"
   tasks:
     - name: Determine Hostname
       set_fact:
