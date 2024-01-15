@@ -1,8 +1,9 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
-  include_vars:
-    file: /root/secrets/prox-ubuntu-lxc-secret.yml
-  tasks:      
+  tasks:   
+    - name: Include Secret Variable File
+      include_vars:
+        file: /root/secrets/prox-ubuntu-lxc-secret.yml   
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 - name: Proxmox LXC Cloning
