@@ -1,5 +1,5 @@
 - name: Install community.general Ansible Galaxy collection
-  hosts: 10.10.0.30
+  hosts: localhost
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
