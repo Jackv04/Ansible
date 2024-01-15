@@ -17,16 +17,12 @@
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
-        hostname: "{{ yeppers }}"  # Specify the hostname
-        clone: 101  # The LXC source
+        hostname: "{{ yeppers }}"
+        ostemplate: "ubuntu-23.04-standard_23.04-1_amd64"  # Specify the OS template you want to use
         node: NODE3
         storage: local-lvm
         state: started
         timeout: 500  # Note: The task can take a while. Adapt
-      register: proxmox_result
-
-    - debug:
-        var: proxmox_result
 
     - name: start LXC container
       community.general.proxmox:
