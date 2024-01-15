@@ -1,17 +1,27 @@
 - name: Install community.general Ansible Galaxy collectioncollection
   hosts: localhost
+  nodes:
+  - name: node1
+    host: 10.10.0.10
+    cloneid: 104
+  - name: node2
+    host: 10.10.0.20
+    cloneid: 102
+  - name: node3
+    host: 10.10.0.30
+    cloneid: 101
+
+
   tasks: 
+    - selected_node: "{{ nodes[ survey.NODE_CHOICE - 1 ] }}"
+      node: "{{ selected_node.name }}"
+      host: "{{ selected_node.host }}"
+
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
       
 - name: Proxmox LXC Cloning
-  hosts: localhost
-  vars:
-    node_choice: "{{ NODE_CHOICE }}"
-    proxmox_node: "node{{ node_choice }}"
-    api_host: "{{ '10.10.0.' ~ node_choice }}"
-    clone_id: "{{ {1: 104, 2: 102, 3: 101}[node_choice] }}"
-    hosts: "{{ proxmox_node }}"
+  hosts: node
   tasks:
     - name: Determine Hostname
       set_fact:
@@ -33,12 +43,12 @@
     - name: Clone LXC
       community.general.proxmox:
         vmid: "{{ next_lxc_id }}"
-        node: "{{ proxmox_node }}"
+        node: node
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: "{{ api_host }}"
+        api_host: host
         hostname: "{{ HOSTNAME_CHOICE }}"
-        clone: "{{ clone_id }}"
+        clone: cloneid
         storage: local
         timeout: 180
 
@@ -46,9 +56,9 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: "{{ api_host }}"
+        api_host: host
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
-        node: "{{ proxmox_node }}"
+        node: node
         state: started
 
     - name: get LXC container ID
