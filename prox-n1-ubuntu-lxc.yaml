@@ -3,7 +3,11 @@
   tasks:   
     - name: Include Secret Variable File
       include_vars:
-        file: /root/secrets/prox-ubuntu-lxc-secret.yml   
+        file: secrets/prox-ubuntu-lxc-secret.yml   
+    - name: Debug - List files in secrets directory
+      debug:
+        msg: "{{ lookup('fileglob', '/root/secrets/*') }}"
+
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 - name: Proxmox LXC Cloning
