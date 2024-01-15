@@ -16,7 +16,7 @@
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
-        clone: UbuntuTemplate  # The LXC source
+        clone: 101  # The LXC source
         name: "{{ yeppers }}"  # The target LXC container name
         node: NODE3
         storage: local-lvm
