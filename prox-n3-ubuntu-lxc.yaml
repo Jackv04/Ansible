@@ -3,8 +3,8 @@
   tasks:
     - name: Apt Update & Upgrade
       ansible.builtin.apt:
-        Update: yes
-        Upgrade: yes
+        update_cache: yes
+        upgrade: yes
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
     - name: Install PIP3
