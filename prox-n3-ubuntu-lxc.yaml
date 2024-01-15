@@ -17,7 +17,7 @@
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
-        clone: 101  # The LXC source
+        clone: UbuntuTemplate  # The LXC source
         node: NODE3
         storage: local-lvm
         state: started
