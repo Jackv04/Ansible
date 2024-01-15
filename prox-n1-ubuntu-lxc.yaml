@@ -5,6 +5,9 @@
       ansible.builtin.command: ansible-galaxy collection install community.general
 - name: Proxmox LXC Cloning
   hosts: 10.10.0.10
+  env:
+    PASSWORD: ${{ secrets.NODE_PASSWORD }}
+    TOKEN: ${{ secrets.ANSIBLESLACKTOKEN}}
   vars:
     container_name: ubuntu
   tasks:
