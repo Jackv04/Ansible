@@ -15,9 +15,10 @@
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
     - name: Get existing LXC container IDs on NODE3
-      shell: pct list --all | awk '{print $1}'
+      shell: pct list --all | awk '{print $1}' || true
       register: existing_lxc_ids
-      changed_when: false
+      ignore_errors: true
+
 
     - name: Determine the next available LXC ID
       set_fact:
@@ -26,9 +27,6 @@
     - name: Display the next available LXC ID
       debug:
         var: next_lxc_id
-
-
-
 
     - name: Clone LXC
       community.general.proxmox:
