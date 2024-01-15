@@ -36,7 +36,7 @@
         hostname: "{{ yeppers }}"
         clone: 101
         storage: local
-        timeout: 120
+        timeout: 180
 
     - name: Start LXC container
       community.general.proxmox:
@@ -69,7 +69,7 @@
 
     - name: Slack Notification
       community.general.slack:
-        token: xapp-1-A06E77RHNPK-6465073048550-12569a15e13881fbaee3491cdaaf104e9acd808db1c37847c9b5a5bf5aa6aec6
+        token: T061A79MU75/B06EH5GHL3A/jqsI4FVuHq22e6QwRGWZkiQk
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
