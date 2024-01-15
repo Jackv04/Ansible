@@ -1,3 +1,14 @@
+- name: Run Python Script
+  script: prox-ubuntu-lxc.py {{PASSWORD}} {{TOKEN}}
+  register: output
+
+- debug:
+    var: output
+- debug:
+    var: {{PASSWORD}}
+- debug:
+    var: {{TOKEN}}
+
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
   tasks:
