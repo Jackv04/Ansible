@@ -58,6 +58,7 @@
     - name: get LXC container ID
       shell: pct list | grep "{{ yeppers }}" | awk '{ print $1 }'
       register: thelxcid
+      
     
     - name: debug LXC container ID
       debug:
@@ -76,7 +77,13 @@
     - name: debug LXC container IP
       debug:
         var: theip.stdout
-    
+
+    - name: Debug Output
+      debug:
+        var: existing_lxc_ids.stdout_lines
+      when: existing_lxc_ids is defined and existing_lxc_ids.stdout_lines | default([]) | length > 0
+
+        
     - name: Slack Notification
       community.general.slack:
         token: zQzYzg1NWYzYTIxMjMzZTI2YzljZmRhZDJkYzZjMWFhNTMyZjE3MGYwMQ8a2254b648b25a9e355f508ab2ef5fcb
