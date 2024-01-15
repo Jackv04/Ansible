@@ -1,24 +1,13 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
-
-  vars:
-    NODE_CHOICE: "{{ semaphore_CHOSEN NODE}}"
-    HOSTNAME_CHOICE: "{{ semaphore_CHOSEN HOSTNAME}}"
-  # vars_prompt:
-  #   - name: CHOSEN HOSTNAME
-  #     prompt: "Choose a hostname: "
-  #     private: false
-
-  #   - name: CHOSEN NODE
-  #     prompt: "Choose a node: "
-  #     private: false
-
+    # semaphore_CHOSEN NODE
+    # semaphore_CHOSEN HOSTNAME
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 
 - name: Proxmox LXC Cloning
-  hosts: "{{ NODE_CHOICE }}"
+  hosts: "{{ semaphore_CHOSEN NODE }}"
   vars:
     container_name: ubuntu
   tasks:
@@ -45,8 +34,8 @@
         node: NODE3
         api_user: root@pam
         api_password: 9925408
-        api_host: "{{ NODE_CHOICE }}"
-        hostname: "{{ HOSTNAME_CHOICE }}"
+        api_host: "{{ semaphore_CHOSEN NODE }}"
+        hostname: "{{ semaphore_CHOSEN HOSTNAME }}"
         clone: 101
         storage: local
         timeout: 180
@@ -55,13 +44,13 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: 9925408
-        api_host: "{{ NODE_CHOICE }}"
+        api_host: "{{ semaphore_CHOSEN NODE }}"
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: NODE3
         state: started
 
     - name: get LXC container ID
-      shell: pct list | grep "{{ HOSTNAME_CHOICE }}" | awk '{ print $1 }'
+      shell: pct list | grep "{{ semaphore_CHOSEN HOSTNAME }}" | awk '{ print $1 }'
       register: thelxcid
 
     - name: debug LXC container ID
@@ -86,7 +75,7 @@
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
-          `Container`: "{{ HOSTNAME_CHOICE }}"
+          `Container`: "{{ semaphore_CHOSEN HOSTNAME }}"
           {% if theip is defined %}
           `IP ADDRESS`: "{{ theip.stdout }}"
           'URL': ssh://user@{{ theip.stdout }}
