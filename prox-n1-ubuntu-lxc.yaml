@@ -7,8 +7,6 @@
   hosts: 10.10.0.10
   vars:
     container_name: ubuntu
-    PASSWORD: "{{ secrets.PASSWORD }}"
-    TOKEN: "{{ secrets.SLACK_TOKEN }}"
   tasks:
     - name: Determine Hostname
       set_fact:
@@ -23,7 +21,7 @@
       set_fact:
         next_lxc_id: "{{ existing_lxc_ids.stdout_lines | map('int') | max + 1 | default(100) }}"
 
-    - name: Display the next available LXC ID
+    - name: Display the next available LXC IDnext_lxc_id
       debug:
         var: next_lxc_id
 
@@ -32,7 +30,7 @@
         vmid: "{{ next_lxc_id }}"
         node: NODE1
         api_user: root@pam
-        api_password: "{{ PASSWORD }}"
+        api_password: ${{ secrets.NODE_PASSWORD }}
         api_host: 10.10.0.10
         hostname: "{{ HOSTNAME_CHOICE }}"
         clone: 104
@@ -42,7 +40,7 @@
     - name: Start LXC container
       community.general.proxmox:
         api_user: root@pam
-        api_password: "{{ PASSWORD }}"
+        api_password: ${{ secrets.NODE_PASSWORD }}
         api_host: 10.10.0.10
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: NODE1
@@ -70,7 +68,7 @@
 
     - name: Slack Notification
       community.general.slack:
-        token: "{{ TOKEN }}"
+        token: ${{ secrets.ANSIBLESLACKTOKEN }}
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
