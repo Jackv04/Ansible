@@ -1,16 +1,18 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
+
+  vars_prompt:
+    - name: CHOSEN HOSTNAME
+      prompt: "Choose a hostname: "
+      private: false
+
+    - name: CHOSEN NODE
+      prompt: "Choose a node: "
+      private: false
+
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
-
-- name: CHOSEN HOSTNAME
-  prompt: "Choose a hostname: "
-  private: false
-
-- name: CHOSEN NODE
-  prompt: "Choose a node: "
-  private: false
 
 - name: Proxmox LXC Cloning
   hosts: "{{ CHOSEN NODE }}"
