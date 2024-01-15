@@ -17,11 +17,11 @@
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
-        clone: UbuntuTemplate  # The LXC source
+        hostname: "{{ yeppers }}"  # Specify the hostname
+        clone: 101  # The LXC source
         node: NODE3
         storage: local-lvm
         state: started
-        hostname: "{{ yeppers }}"  # Specify the hostname
         timeout: 500  # Note: The task can take a while. Adapt
 
     - name: start LXC container
