@@ -8,7 +8,7 @@
       set_fact:
         node: "{{ 'node' + NODE_CHOICE }}"
         host: "{{ '10.10.0.' + NODE_CHOICE + '0' }}"
-        cloneid: "{{ 105 - NODE_CHOICE | int }}"
+        cloneid: "{{ 900 + NODE_CHOICE | int }}"
 
     - name: Display configured values
       debug:
