@@ -14,23 +14,18 @@
     - set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
-    - name: Get existing VMIDs
-      community.general.proxmox:
-        api_user: root@pam
-        api_password: 9925408
-        api_host: 10.10.0.30
-        node: NODE3
-        method: get
-        path: /nodes/NODE3/qemu
-      register: existing_vms
+    - name: Get existing LXC container IDs
+      shell: pct list | awk '/{{ yeppers }}/ {print $1}'
+      register: existing_lxc_ids
+      changed_when: false
 
-    - name: Determine the next available VMID
+    - name: Determine the next available LXC ID
       set_fact:
-        next_vmid: "{{ existing_vms.response | json_query('[].vmid') | max + 1 | default(100) }}"
+        next_lxc_id: "{{ existing_lxc_ids.stdout_lines | map('int') | max + 1 | default(100) }}"
 
-    - name: Display the next available VMID
+    - name: Display the next available LXC ID
       debug:
-        var: next_vmid
+        var: next_lxc_id
 
     - name: Clone LXC
       community.general.proxmox:
