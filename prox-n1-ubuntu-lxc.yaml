@@ -1,7 +1,7 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
-  vars_files:
-    - prox-ubuntu-lxc-secret.yml
+  include_vars:
+    file: /root/secrets/prox-ubuntu-lxc-secret.yml
   tasks:      
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
