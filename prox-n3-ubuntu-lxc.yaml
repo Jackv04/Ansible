@@ -44,14 +44,16 @@
       when: existing_lxc_ids is defined and existing_lxc_ids.stdout_lines | default([]) | length > 0
 
 
-    - name: start LXC container
+    - name: Start LXC container
       community.general.proxmox:
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
-        name: "{{ yeppers }}"
+        vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: NODE3
         state: started
+      when: existing_lxc_ids is defined and existing_lxc_ids.stdout_lines | default([]) | length > 0
+
     
     - name: get LXC container ID
       shell: pct list | grep "{{ yeppers }}" | awk '{ print $1 }'
