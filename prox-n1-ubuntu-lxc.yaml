@@ -8,15 +8,18 @@
   vars:
     container_name: ubuntu
     node_choice: "{{ NODE_CHOICE }}"
-    proxmox_node: "{{ {1: 'node1', 2: 'node2', 3: 'node3'}[node_choice] }}"
-    api_host: "{{ {1: '10.10.0.10', 2: '10.10.0.20', 3: '10.10.0.30'}[node_choice] }}"
-    clone_id: "{{ {1: 104, 2: 102, 3: 101}[node_choice] }}"
-  hosts: "{{ proxmox_node }}"
+  hosts: "{{ lookup('vars', 'proxmox_node') }}"
   tasks:
     - name: Determine Hostname
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
+    - name: Set variables based on node choice
+      set_fact:
+        clone_id: "{{ {1: 104, 2: 102, 3: 101}[node_choice] }}"
+        proxmox_node: "{{ {1: 'node1', 2: 'node2', 3: 'node3'}[node_choice] }}"
+        api_host: "{{ {1: '10.10.0.10', 2: '10.10.0.20', 3: '10.10.0.30'}[node_choice] }}"
+        
     - name: Get existing LXC container IDs on NODE1
       shell: pct list | awk '{print $1}' || true
       register: existing_lxc_ids
