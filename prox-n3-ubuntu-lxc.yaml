@@ -14,17 +14,19 @@
     - set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
-    - name: Get the list of VMIDs
-      community.general.proxmox_vm_list:
+    - name: Get existing VMIDs
+      community.general.proxmox:
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
         node: NODE3
-      register: vm_list_result
+        method: get
+        path: /nodes/{{ proxmox_node }}/qemu
+      register: existing_vms
 
     - name: Determine the next available VMID
       set_fact:
-        next_vmid: "{{ vm_list_result.virtual_machines | map(attribute='vmid') | max + 1 | default(100) }}"
+        next_vmid: "{{ existing_vms.response | json_query('[].vmid') | max + 1 | default(100) }}"
 
     - name: Display the next available VMID
       debug:
