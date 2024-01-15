@@ -20,6 +20,8 @@
         name: "{{ yeppers }}"  # The target LXC container name
         node: NODE3
         storage: local-lvm
+        state: started
+        hostname: "{{ yeppers }}"  # Specify the hostname
         timeout: 500  # Note: The task can take a while. Adapt
 
     - name: start LXC container
