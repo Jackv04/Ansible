@@ -1,20 +1,16 @@
-- name: Run Python Script
-  hosts: localhost
-  script: prox-ubuntu-lxc.py {{PASSWORD}} {{TOKEN}}
-  register: output
-
-- debug:
-    var: output
-- debug:
-    var: "{{PASSWORD}}"
-- debug:
-    var: "{{TOKEN}}"
-
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
+
+    - name: Run Python Script
+      ansible.builtin.script:
+        cmd: /root/scripts/prox-ubuntu-lxc.py
+        executable: /usr/bin/python3
+      register: result
+    - debug:
+        var: result
 - name: Proxmox LXC Cloning
   hosts: 10.10.0.10
   vars:
