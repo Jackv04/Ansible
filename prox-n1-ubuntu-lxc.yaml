@@ -1,4 +1,5 @@
 - name: Run Python Script
+  hosts: localhost
   script: prox-ubuntu-lxc.py {{PASSWORD}} {{TOKEN}}
   register: output
 
