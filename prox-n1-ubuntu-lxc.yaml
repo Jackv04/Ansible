@@ -1,17 +1,14 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
   tasks:      
-    - name: Include Github Secrets as Environment Variables
-      include_vars:
-        file: "/root/.secrets/prox-ubuntu-lxc-secret.yml"
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 - name: Proxmox LXC Cloning
   hosts: 10.10.0.10
   vars:
     container_name: ubuntu
-    PASSWORD: "{{ lookup('env', 'PASSWORD') }}"
-    TOKEN: "{{ lookup('env', 'TOKEN') }}"
+    PASSWORD: "{{ secrets.PASSWORD }}"
+    TOKEN: "{{ secrets.SLACK_TOKEN }}"
   tasks:
     - name: Determine Hostname
       set_fact:
