@@ -16,7 +16,7 @@
 
     - name: Clone LXC
       community.general.proxmox:
-        vmid: "{{ ctid }}"
+        vmid: 164
         node: NODE3
         api_user: root@pam
         api_password: 9925408
