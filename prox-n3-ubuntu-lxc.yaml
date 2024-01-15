@@ -1,6 +1,9 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
 
+  vars:
+    CHOSEN NODE: "{{ semaphore_CHOSEN NODE}}"
+    CHOSEN HOSTNAME: "{{ semaphore_CHOSEN HOSTNAME}}"
   # vars_prompt:
   #   - name: CHOSEN HOSTNAME
   #     prompt: "Choose a hostname: "
