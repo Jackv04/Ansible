@@ -15,7 +15,7 @@
         msg: "Configured settings - Node: {{ node }}, Host: {{ host }}, Cloneid: {{ cloneid }}"
       
 - name: Proxmox LXC Cloning
-  hosts: node
+  hosts: "{{ node }}"
   tasks:
     - name: Determine Hostname
       set_fact:
@@ -37,7 +37,7 @@
     - name: Clone LXC
       community.general.proxmox:
         vmid: "{{ next_lxc_id }}"
-        node: node
+        node: "{{ node }}"
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: host
@@ -52,7 +52,7 @@
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: host
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
-        node: node
+        node: "{{ node }}"
         state: started
 
     - name: get LXC container ID
