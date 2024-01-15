@@ -84,8 +84,13 @@
           ### Your LXC Container is READY!! ###
           --------------------------------------
           `Container`: "{{ yeppers }}"
+          {% if theip is defined %}
           `IP ADDRESS`: "{{ theip.stdout }}"
           'URL': ssh://user@{{ theip.stdout }}
+          {% else %}
+          `IP ADDRESS`: Not available
+          'URL': Not available
+          {% endif %}
           --------------------------------------
         channel: '#ansible'
         color: good
@@ -93,3 +98,5 @@
         link_names: 0
         parse: 'none'
       ignore_errors: true
+      when: existing_lxc_ids is defined and existing_lxc_ids.stdout_lines | default([]) | length > 0
+
