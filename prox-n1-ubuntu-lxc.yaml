@@ -10,6 +10,9 @@
     node_choice: "{{ NODE_CHOICE }}"
   hosts: node"{{ NODE_CHOICE }}
   tasks:
+    - debug:
+        var: node"{{ NODE_CHOICE }}
+
     - name: Determine Hostname
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
