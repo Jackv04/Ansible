@@ -5,10 +5,10 @@
       ansible.builtin.command: ansible-galaxy collection install community.general
       
 - name: Proxmox LXC Cloning
-  hosts: "{{ proxmox_node }}"
   vars:
     container_name: ubuntu
     node_choice: "{{ NODE_CHOICE }}"
+  hosts: "{{ proxmox_node }}"
   tasks:
     - name: Determine Hostname
       set_fact:
