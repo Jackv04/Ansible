@@ -1,5 +1,15 @@
 - name: Install community.general Ansible Galaxy collectioncollection
   hosts: localhost
+  tasks: 
+    - name: Install community.general collection
+      ansible.builtin.command: ansible-galaxy collection install community.general
+
+    - selected_node: "{{ nodes[ survey.NODE_CHOICE - 1 ] }}"
+      node: "{{ selected_node.name }}"
+      host: "{{ selected_node.host }}"
+
+    - name: Install community.general collection
+      ansible.builtin.command: ansible-galaxy collection install community.general
   nodes:
   - name: node1
     host: 10.10.0.10
@@ -10,15 +20,6 @@
   - name: node3
     host: 10.10.0.30
     cloneid: 101
-
-
-  tasks: 
-    - selected_node: "{{ nodes[ survey.NODE_CHOICE - 1 ] }}"
-      node: "{{ selected_node.name }}"
-      host: "{{ selected_node.host }}"
-
-    - name: Install community.general collection
-      ansible.builtin.command: ansible-galaxy collection install community.general
       
 - name: Proxmox LXC Cloning
   hosts: node
