@@ -36,6 +36,7 @@
         hostname: "{{ yeppers }}"
         clone: 101
         storage: local
+        timeout: 120
 
     - name: Start LXC container
       community.general.proxmox:
