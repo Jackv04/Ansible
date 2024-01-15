@@ -8,7 +8,7 @@
   vars:
     container_name: ubuntu
     node_choice: "{{ NODE_CHOICE }}"
-  hosts: "{{ api_host }}"
+  hosts: "{{ {1: 'node1', 2: 'node2', 3: 'node3'}[node_choice] }}"
   tasks:
     - name: Determine Hostname
       set_fact:
