@@ -21,7 +21,7 @@
         api_host: 10.10.0.30
         node: NODE3
         method: get
-        path: /nodes/{{ NODE3 }}/qemu
+        path: /nodes/NODE3/qemu
       register: existing_vms
 
     - name: Determine the next available VMID
