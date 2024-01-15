@@ -14,7 +14,7 @@
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
     - name: Get existing LXC container IDs on NODE3
-      shell: pct list --all | awk '{print $1}' || true
+      shell: pct list | awk '{print $1}' || true
       register: existing_lxc_ids
       ignore_errors: true
 
