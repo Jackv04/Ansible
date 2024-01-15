@@ -8,10 +8,10 @@
   vars:
     container_name: ubuntu
     node_choice: "{{ NODE_CHOICE }}"
-  hosts: node2
+  hosts: node{{ NODE_CHOICE }}
   tasks:
     - debug:
-        var: node"{{ NODE_CHOICE }}
+        var: node{{ NODE_CHOICE }}
 
     - name: Determine Hostname
       set_fact:
