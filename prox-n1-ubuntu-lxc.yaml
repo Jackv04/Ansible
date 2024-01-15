@@ -30,7 +30,7 @@
         vmid: "{{ next_lxc_id }}"
         node: NODE1
         api_user: root@pam
-        api_password: 9925408
+        api_password: "{{ PASSWORD }}"
         api_host: 10.10.0.10
         hostname: "{{ HOSTNAME_CHOICE }}"
         clone: 104
@@ -40,7 +40,7 @@
     - name: Start LXC container
       community.general.proxmox:
         api_user: root@pam
-        api_password: 9925408
+        api_password: "{{ PASSWORD }}"
         api_host: 10.10.0.10
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: NODE1
@@ -68,7 +68,7 @@
 
     - name: Slack Notification
       community.general.slack:
-        token: T061A79MU75/B06EH5GHL3A/jqsI4FVuHq22e6QwRGWZkiQk
+        token: "{{ TOKEN }}"
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
