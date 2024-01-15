@@ -10,8 +10,10 @@
     node_choice: "{{ NODE_CHOICE }}"
   hosts: node{{ NODE_CHOICE }}
   tasks:
-    - debug:
-        var: node{{ NODE_CHOICE }}
+    - name: Debug node_choice
+      debug:
+        var: node_choice
+
 
     - name: Determine Hostname
       set_fact:
