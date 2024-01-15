@@ -4,19 +4,15 @@
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 
-    - selected_node: "{{ nodes[ survey.NODE_CHOICE - 1 ] }}"
-      node: "{{ selected_node.name }}"
-      host: "{{ selected_node.host }}"
-  nodes:
-  - name: node1
-    host: 10.10.0.10
-    cloneid: 104
-  - name: node2
-    host: 10.10.0.20
-    cloneid: 102
-  - name: node3
-    host: 10.10.0.30
-    cloneid: 101
+    - name: Set variables based on NODE_CHOICE
+      set_fact:
+        node: "{{ 'node' + NODE_CHOICE }}"
+        host: "{{ '10.10.0.' + NODE_CHOICE + '0' }}"
+        cloneid: "{{ 105 - NODE_CHOICE | int }}"
+
+    - name: Display configured values
+      debug:
+        msg: "Configured settings - Node: {{ node }}, Host: {{ host }}, Cloneid: {{ cloneid }}"
       
 - name: Proxmox LXC Cloning
   hosts: node
