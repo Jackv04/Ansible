@@ -1,9 +1,6 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
   tasks:
-    - name: Update package cache
-      ansible.builtin.apt:
-        update_cache: yes
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
     - name: Install PIP3
