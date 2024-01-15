@@ -1,5 +1,7 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
+  vars_files:
+    - /root/secrets/prox-ubuntu-lxc-secret.yml
   tasks:      
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
@@ -30,7 +32,7 @@
         vmid: "{{ next_lxc_id }}"
         node: NODE1
         api_user: root@pam
-        api_password: ${{ secrets.NODE_PASSWORD }}
+        api_password: "{{ PASSWORD }}"
         api_host: 10.10.0.10
         hostname: "{{ HOSTNAME_CHOICE }}"
         clone: 104
@@ -40,7 +42,7 @@
     - name: Start LXC container
       community.general.proxmox:
         api_user: root@pam
-        api_password: ${{ secrets.NODE_PASSWORD }}
+        api_password: "{{ PASSWORD }}"
         api_host: 10.10.0.10
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: NODE1
@@ -68,7 +70,7 @@
 
     - name: Slack Notification
       community.general.slack:
-        token: ${{ secrets.ANSIBLESLACKTOKEN }}
+        token: "{{ TOKEN }}"
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
