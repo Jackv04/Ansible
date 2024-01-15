@@ -3,9 +3,8 @@
   tasks: 
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
-
 - name: Proxmox LXC Cloning
-  hosts: 10.10.0.10
+  hosts: "{{ NODE_CHOICE }}"
   vars:
     container_name: ubuntu
   tasks:
@@ -32,9 +31,9 @@
         node: NODE1
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: 10.10.0.10
+        api_host: "{{ NODE_CHOICE }}"
         hostname: "{{ HOSTNAME_CHOICE }}"
-        clone: 104
+        clone: "{{ 104 if NODE_CHOICE == 'node1' else (102 if NODE_CHOICE == 'node2' else 101) }}"
         storage: local
         timeout: 180
 
@@ -42,7 +41,7 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: 10.10.0.10
+        api_host: "{{ NODE_CHOICE }}"
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: NODE1
         state: started
