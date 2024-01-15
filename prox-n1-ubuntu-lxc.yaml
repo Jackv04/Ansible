@@ -1,15 +1,13 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
-  tasks:   
-    - name: Include Secret Variable File
-      include_vars:
-        file: secrets/prox-ubuntu-lxc-secret.yml   
-    - name: Debug - List files in secrets directory
+  tasks: 
+    - name: Display PASSWORD and TOKEN from environment variables
       debug:
-        msg: "{{ lookup('fileglob', '/root/secrets/*') }}"
-
+        msg: "PASSWORD is {{ lookup('env', 'PASSWORD') }}, TOKEN is {{ lookup('env', 'TOKEN') }}"
+  
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
+
 - name: Proxmox LXC Cloning
   hosts: 10.10.0.10
   vars:
