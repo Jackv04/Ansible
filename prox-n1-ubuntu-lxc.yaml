@@ -17,6 +17,15 @@
         clone_id: "{{ {1: 104, 2: 102, 3: 101}[survey_choice] }}"
         proxmox_node: "{{ {1: 'node1', 2: 'node2', 3: 'node3'}[survey_choice] }}"
         api_host: "{{ {1: '10.10.0.10', 2: '10.10.0.20', 3: '10.10.0.30'}[survey_choice] }}"
+    - name: clone_id
+      debug:
+        var: clone_id
+    - name: proxmox_node
+      debug:
+        var: proxmox_node
+    - name: api_host
+      debug:
+        var: api_host
 
 
     - name: Get existing LXC container IDs on NODE1
