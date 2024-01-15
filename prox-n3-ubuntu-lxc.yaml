@@ -12,7 +12,8 @@
     - set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
-    - community.general.proxmox:
+    - name: Clone LXC
+      community.general.proxmox:
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
