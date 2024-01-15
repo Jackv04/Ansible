@@ -1,11 +1,11 @@
 - name: Install community.general Ansible Galaxy collection
-  hosts: localhost
+  hosts: 10.10.0.30
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 
 - name: Proxmox LXC Cloning
-  hosts: all
+  hosts: 10.10.0.30
   vars:
     container_name: ubuntu
   tasks:
