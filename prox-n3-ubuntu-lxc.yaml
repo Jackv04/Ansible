@@ -11,18 +11,19 @@
   tasks:
     - set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
+        ctid: "{{ 100 | random }}"
+      run_once: yes
 
     - name: Clone LXC
       community.general.proxmox:
+        vmid: "{{ ctid }}"
+        node: NODE3
         api_user: root@pam
         api_password: 9925408
         api_host: 10.10.0.30
+        password: 9925408
         hostname: "{{ yeppers }}"
-        ostemplate: "ubuntu-23.04-standard_23.04-1_amd64"  # Specify the OS template you want to use
-        node: NODE3
-        storage: local-lvm
-        state: started
-        timeout: 500  # Note: The task can take a while. Adapt
+        ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64'  # Specify the OS template you want to use
 
     - name: start LXC container
       community.general.proxmox:
