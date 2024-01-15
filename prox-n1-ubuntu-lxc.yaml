@@ -3,14 +3,6 @@
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
-
-    - name: Run Python Script
-      ansible.builtin.script:
-        cmd: /root/scripts/prox-ubuntu-lxc.py
-        executable: /usr/bin/python3
-      register: result
-    - debug:
-        var: result
 - name: Proxmox LXC Cloning
   hosts: 10.10.0.10
   vars:
