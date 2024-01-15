@@ -28,10 +28,10 @@
     - name: Clone LXC
       community.general.proxmox:
         vmid: "{{ next_lxc_id }}"
-        node: NODE1
+        node: "{{ node1 if NODE_CHOICE == '1' else (node2 if NODE_CHOICE == '2' else (node3 if NODE_CHOICE == '3')) }}"
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: "{{ node1 if NODE_CHOICE == '1' else (node2 if NODE_CHOICE == '2' else (node3 if NODE_CHOICE == '3')) }}"
+        api_host: "{{ 10.10.0.10 if NODE_CHOICE == '1' else (10.10.0.20 if NODE_CHOICE == '2' else (10.10.0.30 if NODE_CHOICE == '3')) }}"
         hostname: "{{ HOSTNAME_CHOICE }}"
         clone: "{{ 104 if NODE_CHOICE == '1' else (102 if NODE_CHOICE == '2' else (101 if NODE_CHOICE == '3')) }}"
         storage: local
