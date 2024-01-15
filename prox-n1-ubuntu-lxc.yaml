@@ -7,9 +7,6 @@
     - selected_node: "{{ nodes[ survey.NODE_CHOICE - 1 ] }}"
       node: "{{ selected_node.name }}"
       host: "{{ selected_node.host }}"
-
-    - name: Install community.general collection
-      ansible.builtin.command: ansible-galaxy collection install community.general
   nodes:
   - name: node1
     host: 10.10.0.10
