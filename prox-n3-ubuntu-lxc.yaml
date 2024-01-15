@@ -32,7 +32,7 @@
         api_user: root@pam
         api_password: 9925408
         api_host: "{{ NODE_CHOICE }}"
-        hostname: "{{ HOSTNAME_CHOICE }}"
+        hostname: 10.10.0.30
         clone: 101
         storage: local
         timeout: 180
@@ -47,7 +47,7 @@
         state: started
 
     - name: get LXC container ID
-      shell: pct list | grep "{{ HOSTNAME_CHOICE }}" | awk '{ print $1 }'
+      shell: pct list | grep 10.10.0.30 | awk '{ print $1 }'
       register: thelxcid
 
     - name: debug LXC container ID
@@ -72,7 +72,7 @@
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
-          `Container`: "{{ HOSTNAME_CHOICE }}"
+          `Container`: 10.10.0.30
           {% if theip is defined %}
           `IP ADDRESS`: "{{ theip.stdout }}"
           'URL': ssh://user@{{ theip.stdout }}
