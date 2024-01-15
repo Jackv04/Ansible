@@ -8,6 +8,9 @@
   vars:
     container_name: ubuntu
     node_choice: "{{ NODE_CHOICE }}"
+    clone_id: 100  # Default value
+    proxmox_node: "node{{ node_choice | default(0) }}"
+    api_host: "127.0.0.1"  # Default value
   hosts: localhost
   tasks:
     - name: Set variables based on node choice
@@ -19,8 +22,6 @@
             102
           {% elif node_choice == 3 %}
             101
-          {% else %}
-            100  # Default value if node_choice is not 1, 2, or 3
           {% endif %}
         proxmox_node: "node{{ node_choice }}"
         api_host: >-
@@ -30,8 +31,6 @@
             10.10.0.20
           {% elif node_choice == 3 %}
             10.10.0.30
-          {% else %}
-            127.0.0.1  # Default value if node_choice is not 1, 2, or 3
           {% endif %}
 
     - name: Add proxmox_node to temporary inventory
@@ -41,7 +40,7 @@
       run_once: true
 
 - name: Proxmox LXC Cloning
-  hosts: "node{{ node_choice }}"
+  hosts: "{{ proxmox_node }}"
   tasks:
     - name: Determine Hostname
       set_fact:
