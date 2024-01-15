@@ -1,11 +1,5 @@
 - name: Install community.general Ansible Galaxy collection
   hosts: localhost
-
-  vars:
-    NODE_CHOICE: "{{ semaphore_CHOSEN NODE}}"
-    HOSTNAME_CHOICE: "{{ semaphore_CHOSEN HOSTNAME}}"
-
-
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
