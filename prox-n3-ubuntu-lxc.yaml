@@ -4,6 +4,8 @@
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 
+
+
 - name: Proxmox LXC Cloning
   hosts: 10.10.0.30
   vars:
@@ -12,8 +14,25 @@
     - set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
 
+    - name: Get the list of VMIDs
+      community.general.proxmox_vm_list:
+        api_user: root@pam
+        api_password: 9925408
+        api_host: 10.10.0.30
+        node: NODE3
+      register: vm_list_result
+
+    - name: Determine the next available VMID
+      set_fact:
+        next_vmid: "{{ vm_list_result.virtual_machines | map(attribute='vmid') | max + 1 | default(100) }}"
+
+    - name: Display the next available VMID
+      debug:
+        var: next_vmid
+
     - name: Clone LXC
       community.general.proxmox:
+        vmid: "{{ next_vmid }}"
         node: NODE3
         api_user: root@pam
         api_password: 9925408
