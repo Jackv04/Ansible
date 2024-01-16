@@ -7,6 +7,5 @@
 - name: Get Existing Container IDs
   hosts: nodes
   tasks:
-    ansible.builtin.command:
-    cmd: "pct list | awk '{print $1}'"
+    shell: "pct list | awk '{print $1}'"
     register: existing_ids
