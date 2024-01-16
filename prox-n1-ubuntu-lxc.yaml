@@ -22,7 +22,7 @@
         vmid: "{{ item }}"
       register: existing_lxc_vm_facts
       with_sequence: start=100 end=999
-      when: existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list | length < 900
+      
       loop_control:
         label: "{{ item }}"
 

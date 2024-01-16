@@ -1,0 +1,15 @@
+- name: Install community.general Ansible Galaxy collectioncollection
+  hosts: localhost
+  tasks: 
+    - name: Install community.general collection
+      ansible.builtin.command: ansible-galaxy collection install community.general
+
+- name: Get Existing Container IDs
+  hosts: nodes
+  tasks:
+    - command: "pct list | awk '{print $1}'"
+      register: existing_ids
+
+- name: Display VMIDs
+  debug:
+    var: existing_ids
