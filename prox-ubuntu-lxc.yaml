@@ -9,3 +9,4 @@
   tasks:
     ansible.builtin.command:
     cmd: "pct list | awk '{print $1}'"
+    register: existing_ids
