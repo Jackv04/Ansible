@@ -22,7 +22,7 @@
 
     - name: Determine the next available LXC ID
       set_fact:
-        next_lxc_id: "{{ (range(100, 1000) | reject('in', existing_lxc_ids.stdout_lines | map('int') | list) | list | random) }}"
+        next_lxc_id: "{{ (range(100, 999) | reject('in', existing_lxc_ids.stdout_lines | map('int') | list) | list | random) }}"
 
     - name: Display the next available LXC ID
       debug:
