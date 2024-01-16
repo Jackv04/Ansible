@@ -8,6 +8,11 @@
   hosts: all
   gather_facts: false
   tasks:
+    - name: Set variables based on NODE_CHOICE
+      set_fact:
+        node: "{{ 'node' + NODE_CHOICE }}"
+        host: "{{ '10.10.0.' + NODE_CHOICE + '0' }}"
+
     - name: Get existing LXC container IDs
       community.general.proxmox_kvm:
         api_user: root@pam
