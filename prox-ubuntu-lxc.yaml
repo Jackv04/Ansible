@@ -36,7 +36,7 @@
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: 10.10.{{ NODE }}0
         hostname: "{{ HOSTNAME }}"
-        clone: 102
+        clone: 90{{ NODE }}
         storage: local
         timeout: 180
 
