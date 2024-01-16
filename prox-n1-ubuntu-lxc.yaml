@@ -33,7 +33,7 @@
 
     - name: Determine the next available LXC ID across all nodes
       set_fact:
-        next_lxc_id: "{{ range(100, 1000) | difference(result.ansible_facts.existing_lxc_ids.stdout_lines | map('int')) | first }}"
+        next_lxc_id: "{{ range(100, 1000) | difference(result.existing_lxc_ids.stdout_lines | map('int')) | first }}"
 
     - name: Display the next available LXC ID
       debug:
