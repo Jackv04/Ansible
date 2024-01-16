@@ -3,7 +3,10 @@
   tasks: 
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
-
+     
+- name: Proxmox LXC Cloning
+  hosts: "{{ 'node' + NODE_CHOICE }}"
+  tasks:
     - name: Set variables based on NODE_CHOICE
       set_fact:
         node: "{{ 'node' + NODE_CHOICE }}"
@@ -13,10 +16,7 @@
     - name: Display configured values
       debug:
         msg: "Configured settings - Node: {{ node }}, Host: {{ host }}, Cloneid: {{ cloneid }}"
-      
-- name: Proxmox LXC Cloning
-  hosts: "{{ host }}"
-  tasks:
+
     - name: Determine Hostname
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
