@@ -1,4 +1,4 @@
-- name: Install community.general Ansible Galaxy collection
+- name: Install community.general Ansible Galaxy collectionnode{{ NODE }}
   hosts: localhost
   tasks:
     - name: Install community.general collection
@@ -11,12 +11,8 @@
       ansible.builtin.shell: pct list | awk '{print $1}' || true
       register: existing_lxc_ids
 
-  vars:
-    NODE_CHOICE: "node{{ NODE }}"
-    register: NODE_CHOICE
-
 - name: Proxmox LXC Cloning
-  hosts: "{{ NODE_CHOICE }}"
+  hosts: node{{ NODE }}
   vars:
     container_name: ubuntu
   tasks:
@@ -35,10 +31,10 @@
     - name: Clone LXC
       community.general.proxmox:
         vmid: "{{ next_lxc_id }}"
-        node: "{{ NODE_CHOICE }}"
+        node: node{{ NODE }}
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: "{{ NODE_CHOICE }}"
+        api_host: 10.10.{{ NODE }}0
         hostname: "{{ HOSTNAME_CHOICE }}"
         clone: 102
         storage: local
@@ -48,9 +44,9 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: "{{ NODE_CHOICE }}"
+        api_host: 10.10.{{ NODE }}0
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
-        node: "{{ NODE_CHOICE }}"
+        node: node{{ NODE }}
         state: started
 
     - name: get LXC container ID
