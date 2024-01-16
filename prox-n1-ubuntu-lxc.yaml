@@ -22,11 +22,15 @@
         vmid: "{{ item }}"
       register: existing_lxc_vm_facts
       with_sequence: start=100 end=999
+      loop_control:
+        label: "{{ item }}"
+        when: existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list | length < 900
 
     - name: Find the next available LXC ID
       set_fact:
-        next_lxc_id: "{{ (range(100, 1000) | difference(existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list) | first) | int }}"
-      when: existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list | length < 900
+        next_lxc_id: "{{ item }}"
+      loop: "{{ existing_lxc_vm_facts.results }}"
+      when: item.ansible_facts.virtualmachine.id is not defined
 
     - name: Display the next available LXC ID
       debug:
