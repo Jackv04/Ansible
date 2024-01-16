@@ -28,36 +28,18 @@
       debug:
         var: next_lxc_id
 
-    # - name: Clone LXC
-    #   community.general.proxmox:
-    #     vmid: "{{ next_lxc_id }}"
-    #     node: node{{ NODE }}
-    #     api_user: root@pam
-    #     api_password: "{{ lookup('env', 'PASSWORD') }}"
-    #     api_host: 10.10.0.{{ NODE }}0
-    #     hostname: "{{ HOSTNAME }}"
-    #     clone: 90{{ NODE }}
-    #     clone_type: full
-    #     storage: local
-    #     timeout: 180
-
-    - name: Create LXC container
+    - name: Clone LXC
       community.general.proxmox:
+        vmid: "{{ next_lxc_id }}"
+        node: node{{ NODE }}
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: 10.10.0.{{ NODE }}0
-        password: "{{ lookup('env', 'PASSWORD') }}"
         hostname: "{{ HOSTNAME }}"
-        vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
-        node: NODE{{ NODE }}
-        cores: '2'
-        cpus: '1'
-        ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.zst'
-        storage: 'local-lvm'
-        disk: '8'
-        memory: '1024'
-        netif: '{"net0":"name=eth0,ip=dhcp/,ip6=dhcp,bridge=vmbr0"}'
-        state: present
+        clone: 90{{ NODE }}
+        clone_type: full
+        storage: local
+        timeout: 180
 
     - name: Start LXC container
       community.general.proxmox:
