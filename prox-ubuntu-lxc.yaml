@@ -40,7 +40,7 @@
         clone_type: full
         storage: local
         timeout: 180
-        verify_ssl: no
+        verify_ssl: false
 
     - name: Start LXC container
       community.general.proxmox:
