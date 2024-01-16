@@ -36,11 +36,11 @@
 
     - name: Display the next available LXC ID
       debug:
-        var: next_lxc_id
+        var: result.ansible_facts.next_lxc_id
 
     - name: Clone LXC
       community.general.proxmox:
-        vmid: "{{ next_lxc_id }}"
+        vmid: "{{ result.ansible_facts.next_lxc_id }}"
         node: "{{ node }}"
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
@@ -55,7 +55,7 @@
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: "{{ host }}"
-        vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
+        vmid: "{{ result.ansible_facts.next_lxc_id }}"  # Use the variable created earlier
         node: "{{ node }}"
         state: started
 
