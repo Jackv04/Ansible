@@ -7,12 +7,5 @@
 - name: Get Existing Container IDs
   hosts: nodes
   tasks:
-    - command: "pct list | awk '{print $1}'"
-    - register: existing_ids
-    - debug:
-        var: existing_ids
-
-- name: Display VMIDs
-  hosts: node1
-  tasks:  
-    - msg: "{{ existing_ids }}"
+    ansible.builtin.command:
+    cmd: "pct list | awk '{print $1}'"
