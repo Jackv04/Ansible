@@ -19,8 +19,9 @@
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: "{{ host }}"
         node: "{{ node }}"
-        vmid: "all"
+        vmid: "{{ item }}"
       register: existing_lxc_vm_facts
+      with_sequence: start=100 end=999
 
 - name: Proxmox LXC Cloning
   hosts: "{{ 'node' + NODE_CHOICE }}"
