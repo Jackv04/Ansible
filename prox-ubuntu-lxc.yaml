@@ -5,8 +5,9 @@
       ansible.builtin.command: ansible-galaxy collection install community.general
 
 - name: Get existing LXC container IDs on NODE3
+  hosts: nodes
   tasks:
-    shell: pct list | awk '{print $1}' || true
+    ansible.builtin.shell: pct list | awk '{print $1}' || true
     register: existing_lxc_ids
 
 - name: Proxmox LXC Cloning
