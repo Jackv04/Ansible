@@ -1,11 +1,90 @@
-- name: Install community.general Ansible Galaxy collectioncollection
+- name: Install community.general Ansible Galaxy collection
   hosts: localhost
-  tasks: 
+  tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
 
-- name: Get Existing Container IDs
-  hosts: nodes
+- name: Get existing LXC container IDs on NODE3
   tasks:
-    shell: "pct list | awk '{print $1}'"
-    register: existing_ids
+    shell: pct list | awk '{print $1}' || true
+    register: existing_lxc_ids
+
+- name: Proxmox LXC Cloning
+  hosts: node"{{ NODE }}"
+  vars:
+    container_name: ubuntu
+  tasks:
+    - name: Determine Hostname
+      set_fact:
+        yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
+
+    - name: Determine the next available LXC ID
+      set_fact:
+        next_lxc_id: "{{ existing_lxc_ids.stdout_lines | map('int') | max + 1 | default(100) }}"
+
+    - name: Display the next available LXC ID
+      debug:
+        var: next_lxc_id
+
+    - name: Clone LXC
+      community.general.proxmox:
+        vmid: "{{ next_lxc_id }}"
+        node: node"{{ NODE }}"
+        api_user: root@pam
+        api_password: "{{ lookup('env', 'PASSWORD') }}"
+        api_host: node"{{ NODE }}"
+        hostname: "{{ HOSTNAME_CHOICE }}"
+        clone: 102
+        storage: local
+        timeout: 180
+
+    - name: Start LXC container
+      community.general.proxmox:
+        api_user: root@pam
+        api_password: "{{ lookup('env', 'PASSWORD') }}"
+        api_host: node"{{ NODE }}"
+        vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
+        node: node"{{ NODE }}"
+        state: started
+
+    - name: get LXC container ID
+      shell: pct list | grep "{{ HOSTNAME_CHOICE }}" | awk '{ print $1 }'
+      register: thelxcid
+
+    - name: debug LXC container ID
+      debug:
+        var: thelxcid.stdout
+
+    - name: Pause for 1 minute to build app cache
+      ansible.builtin.pause:
+        minutes: 1
+
+    - name: get LXC container IP
+      shell: pct exec "{{ next_lxc_id }}" -- ip a show dev eth0 | grep -oP 'inet \K\S+'
+      register: theip
+
+    - name: debug LXC container IP
+      debug:
+        var: theip.stdout
+
+    - name: Slack Notification
+      community.general.slack:
+        token: "{{ lookup('env', 'TOKEN') }}"
+        msg: |
+          ### Your LXC Container is READY!! ###
+          --------------------------------------
+          `Container`: "{{ HOSTNAME_CHOICE }}"
+          {% if theip is defined %}
+          `IP ADDRESS`: "{{ theip.stdout }}"
+          'URL': ssh://user@{{ theip.stdout }}
+          {% else %}
+          `IP ADDRESS`: Not available
+          'URL': Not available
+          {% endif %}
+          --------------------------------------
+        channel: '#ansible'
+        color: good
+        username: 'Ansible on {{ inventory_hostname }}'
+        link_names: 0
+        parse: 'none'
+      ignore_errors: true
