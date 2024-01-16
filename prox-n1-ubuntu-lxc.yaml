@@ -10,7 +10,7 @@
   tasks:
     - name: Get existing LXC container IDs
       shell: pct list | awk '{print $1}' || true
-      register: existing_lxc_ids
+      include: existing_lxc_ids
       ignore_errors: true
      
 - name: Proxmox LXC Cloning
@@ -36,11 +36,11 @@
 
     - name: Display the next available LXC ID
       debug:
-        var: result.ansible_facts.next_lxc_id
+        var: next_lxc_id
 
     - name: Clone LXC
       community.general.proxmox:
-        vmid: "{{ result.ansible_facts.next_lxc_id }}"
+        vmid: "{{ next_lxc_id }}"
         node: "{{ node }}"
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
@@ -55,7 +55,7 @@
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: "{{ host }}"
-        vmid: "{{ result.ansible_facts.next_lxc_id }}"  # Use the variable created earlier
+        vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: "{{ node }}"
         state: started
 
