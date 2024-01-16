@@ -3,6 +3,9 @@
   tasks:
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
+    - ansible.builtin.apt:
+        name: python3-proxmoxer requests
+        state: present
 
 - name: Get existing LXC container IDs on NODE3
   hosts: all
@@ -40,7 +43,7 @@
         clone_type: full
         storage: local
         timeout: 180
-        verify_ssl: false
+        verify_ssl: no
 
     - name: Start LXC container
       community.general.proxmox:
