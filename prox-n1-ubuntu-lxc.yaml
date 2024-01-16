@@ -23,14 +23,8 @@
       register: existing_lxc_vm_facts
       with_sequence: start=100 end=999
 
-- name: Proxmox LXC Cloning
-  hosts: "{{ 'node' + NODE_CHOICE }}"
-  tasks:
-    - name: Set variables based on NODE_CHOICE
+    - name: Find the next available LXC ID
       set_fact:
-        node: "{{ 'node' + NODE_CHOICE }}"
-        host: "{{ '10.10.0.' + NODE_CHOICE + '0' }}"
-        cloneid: "{{ 900 + NODE_CHOICE | int }}"
         next_lxc_id: "{{ (range(100, 1000) | difference(existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list) | first) | int }}"
       when: existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list | length < 900
 
