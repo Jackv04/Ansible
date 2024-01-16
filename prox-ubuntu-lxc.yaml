@@ -31,7 +31,7 @@
     - name: Clone LXC
       community.general.proxmox:
         vmid: "{{ next_lxc_id }}"
-        node: node{{ NODE }}
+        node: NODE{{ NODE }}
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: 10.10.0.{{ NODE }}0
@@ -40,7 +40,6 @@
         clone_type: full
         storage: local
         timeout: 180
-        verify_ssl: false
 
     - name: Start LXC container
       community.general.proxmox:
@@ -48,7 +47,7 @@
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: 10.10.0.{{ NODE }}0
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
-        node: node{{ NODE }}
+        node: NODE{{ NODE }}
         state: started
 
     - name: get LXC container ID
