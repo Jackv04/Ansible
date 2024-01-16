@@ -11,8 +11,12 @@
       ansible.builtin.shell: pct list | awk '{print $1}' || true
       register: existing_lxc_ids
 
+    - name: Set NODE
+      vars:
+        NODE: node{{ NODE }}
+
 - name: Proxmox LXC Cloning
-  hosts: node{{ NODE }}"
+  hosts: "{{ NODE }}"
   vars:
     container_name: ubuntu
   tasks:
@@ -31,10 +35,10 @@
     - name: Clone LXC
       community.general.proxmox:
         vmid: "{{ next_lxc_id }}"
-        node: node{{ NODE }}"
+        node: "{{ NODE }}"
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: node{{ NODE }}"
+        api_host: "{{ NODE }}"
         hostname: "{{ HOSTNAME_CHOICE }}"
         clone: 102
         storage: local
@@ -44,9 +48,9 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: node{{ NODE }}"
+        api_host: "{{ NODE }}"
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
-        node: node{{ NODE }}"
+        node: "{{ NODE }}"
         state: started
 
     - name: get LXC container ID
