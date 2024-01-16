@@ -12,10 +12,10 @@
       register: existing_lxc_ids
 
   vars:
-    NODE: node{{ NODE }}
+    NODE_CHOICE: "node{{ NODE }}"
 
 - name: Proxmox LXC Cloning
-  hosts: "{{ NODE }}"
+  hosts: "{{ NODE_CHOICE }}"
   vars:
     container_name: ubuntu
   tasks:
@@ -34,10 +34,10 @@
     - name: Clone LXC
       community.general.proxmox:
         vmid: "{{ next_lxc_id }}"
-        node: "{{ NODE }}"
+        node: "{{ NODE_CHOICE }}"
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: "{{ NODE }}"
+        api_host: "{{ NODE_CHOICE }}"
         hostname: "{{ HOSTNAME_CHOICE }}"
         clone: 102
         storage: local
@@ -47,9 +47,9 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: "{{ NODE }}"
+        api_host: "{{ NODE_CHOICE }}"
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
-        node: "{{ NODE }}"
+        node: "{{ NODE_CHOICE }}"
         state: started
 
     - name: get LXC container ID
