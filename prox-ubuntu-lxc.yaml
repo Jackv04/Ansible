@@ -9,6 +9,8 @@
   tasks:
     - command: "pct list | awk '{print $1}'"
       register: existing_ids
+      debug:
+        var: existing_ids
 
 - name: Display VMIDs
   hosts: node1
