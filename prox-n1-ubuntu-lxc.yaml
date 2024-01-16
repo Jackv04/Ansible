@@ -32,7 +32,6 @@
         cloneid: "{{ 900 + NODE_CHOICE | int }}"
         existing_lxc_ids: "{{ existing_lxc_vm_facts.virtualmachines.keys() | map('int') | list }}"
 
-
     - name: Display configured values
       debug:
         msg: "Configured settings - Node: {{ node }}, Host: {{ host }}, Cloneid: {{ cloneid }}"
