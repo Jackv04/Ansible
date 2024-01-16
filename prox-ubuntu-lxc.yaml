@@ -34,7 +34,7 @@
         node: node{{ NODE }}
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: 10.10.{{ NODE }}0
+        api_host: 10.10.0.{{ NODE }}0
         hostname: "{{ HOSTNAME }}"
         clone: 90{{ NODE }}
         storage: local
@@ -44,7 +44,7 @@
       community.general.proxmox:
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
-        api_host: 10.10.{{ NODE }}0
+        api_host: 10.10.0.{{ NODE }}0
         vmid: "{{ next_lxc_id }}"  # Use the variable created earlier
         node: node{{ NODE }}
         state: started
