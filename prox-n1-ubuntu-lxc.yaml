@@ -3,6 +3,15 @@
   tasks: 
     - name: Install community.general collection
       ansible.builtin.command: ansible-galaxy collection install community.general
+
+- name: Get existing LXC container IDs on all nodes
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Get existing LXC container IDs
+      shell: pct list | awk '{print $1}' || true
+      register: existing_lxc_ids
+      ignore_errors: true
      
 - name: Proxmox LXC Cloning
   hosts: "{{ 'node' + NODE_CHOICE }}"
@@ -20,15 +29,6 @@
     - name: Determine Hostname
       set_fact:
         yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
-        
-    - name: Get existing LXC container IDs on all nodes
-      hosts: nodes
-      gather_facts: false
-      tasks:
-        - name: Get existing LXC container IDs
-          shell: pct list | awk '{print $1}' || true
-          register: existing_lxc_ids
-          ignore_errors: true
 
     - name: Determine the next available LXC ID across all nodes
       set_fact:
