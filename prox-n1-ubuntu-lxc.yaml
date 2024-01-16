@@ -9,13 +9,14 @@
   gather_facts: false
   tasks:
     - name: Get existing LXC container IDs
-      community.general.proxmox_vm_facts:
+      community.general.proxmox_kvm:
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: "{{ host }}"
         node: "{{ node }}"
+        vmid: "all"
       register: existing_lxc_vm_facts
-     
+
 - name: Proxmox LXC Cloning
   hosts: "{{ 'node' + NODE_CHOICE }}"
   tasks:
@@ -24,7 +25,8 @@
         node: "{{ 'node' + NODE_CHOICE }}"
         host: "{{ '10.10.0.' + NODE_CHOICE + '0' }}"
         cloneid: "{{ 900 + NODE_CHOICE | int }}"
-        existing_lxc_ids: "{{ existing_lxc_vm_facts.ansible_facts.virtualmachines.keys() | map('int') | list }}"
+        existing_lxc_ids: "{{ existing_lxc_vm_facts.virtualmachines.keys() | map('int') | list }}"
+
 
     - name: Display configured values
       debug:
