@@ -9,9 +9,10 @@
   gather_facts: false
   tasks:
     - name: Get existing LXC container IDs
-      shell: pct list | awk '{print $1}' || true
-      include: existing_lxc_ids
-      ignore_errors: true
+      set_fact:
+        existing_lxc_ids: 
+          shell: pct list | awk '{print $1}' || true
+      register: result
      
 - name: Proxmox LXC Cloning
   hosts: "{{ 'node' + NODE_CHOICE }}"
@@ -32,7 +33,7 @@
 
     - name: Determine the next available LXC ID across all nodes
       set_fact:
-        next_lxc_id: "{{ range(100, 1000) | difference(existing_lxc_ids.stdout_lines | map('int')) | first }}"
+        next_lxc_id: "{{ range(100, 1000) | difference(result.ansible_facts.existing_lxc_ids.stdout_lines | map('int')) | first }}"
 
     - name: Display the next available LXC ID
       debug:
