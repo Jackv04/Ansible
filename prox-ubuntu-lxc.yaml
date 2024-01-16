@@ -14,4 +14,4 @@
   hosts: node1
   tasks:  
     debug:
-      var: existing_ids
+      var: "{{ existing_ids }}"
