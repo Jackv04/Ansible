@@ -11,9 +11,8 @@
       ansible.builtin.shell: pct list | awk '{print $1}' || true
       register: existing_lxc_ids
 
-    - name: Set NODE
-      vars:
-        NODE: node{{ NODE }}
+  vars:
+    NODE: node{{ NODE }}
 
 - name: Proxmox LXC Cloning
   hosts: "{{ NODE }}"
