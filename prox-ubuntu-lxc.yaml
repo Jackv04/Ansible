@@ -5,10 +5,11 @@
       ansible.builtin.command: ansible-galaxy collection install community.general
 
 - name: Get existing LXC container IDs on NODE3
-  hosts: nodes
+  hosts: all
   tasks:
-    ansible.builtin.shell: pct list | awk '{print $1}' || true
-    register: existing_lxc_ids
+    - name: Get existing LXC container IDs
+      ansible.builtin.shell: pct list | awk '{print $1}' || true
+      register: existing_lxc_ids
 
 - name: Proxmox LXC Cloning
   hosts: node"{{ NODE }}"
@@ -49,7 +50,7 @@
         state: started
 
     - name: get LXC container ID
-      shell: pct list | grep "{{ HOSTNAME_CHOICE }}" | awk '{ print $1 }'
+      ansible.builtin.shell: pct list | grep "{{ HOSTNAME_CHOICE }}" | awk '{ print $1 }'
       register: thelxcid
 
     - name: debug LXC container ID
@@ -61,7 +62,7 @@
         minutes: 1
 
     - name: get LXC container IP
-      shell: pct exec "{{ next_lxc_id }}" -- ip a show dev eth0 | grep -oP 'inet \K\S+'
+      ansible.builtin.shell: pct exec "{{ next_lxc_id }}" -- ip a show dev eth0 | grep -oP 'inet \K\S+'
       register: theip
 
     - name: debug LXC container IP
