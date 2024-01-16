@@ -52,7 +52,7 @@
         node: NODE{{ NODE }}
         cores: '2'
         cpus: '1'
-        ostemplate: 'local-lvm:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.zst'
+        ostemplate: 'local:vztmpl/ubuntu-23.04-standard_23.04-1_amd64.tar.zst'
         storage: 'local-lvm'
         disk: '8'
         memory: '1024'
