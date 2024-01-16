@@ -11,5 +11,7 @@
       register: existing_ids
 
 - name: Display VMIDs
-  debug:
-    var: existing_ids
+  hosts: node1
+  tasks:  
+    debug:
+      var: existing_ids
