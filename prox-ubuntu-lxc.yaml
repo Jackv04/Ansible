@@ -39,7 +39,7 @@
         clone: 90{{ NODE }}
         clone_type: full
         storage: local
-        timeout: 180
+        timeout: 300
 
     - name: Start LXC container
       community.general.proxmox:
