@@ -19,10 +19,8 @@
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: "{{ host }}"
         node: "{{ node }}"
-        vmid: "{{ item }}"
+        vmid: "all"
       register: existing_lxc_vm_facts
-      ignore_errors: true
-      with_items: "{{ range(100, 1000) | list }}"  # Adjust the range as needed
 
 - name: Proxmox LXC Cloning
   hosts: "{{ 'node' + NODE_CHOICE }}"
@@ -32,20 +30,16 @@
         node: "{{ 'node' + NODE_CHOICE }}"
         host: "{{ '10.10.0.' + NODE_CHOICE + '0' }}"
         cloneid: "{{ 900 + NODE_CHOICE | int }}"
-        existing_lxc_ids: "{{ existing_lxc_vm_facts.results | selectattr('failed', 'eq', false) | map(attribute='ansible_facts.virtualmachine.id') | list }}"
+    
+    - name: Find next available LXC ID
+      set_fact:
+        next_lxc_id: "{{ item }}"
+      with_sequence: start=100
+      when: item not in existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list
 
-
-    - name: Display configured values
+    - name: Display the next available LXC ID
       debug:
-        msg: "Configured settings - Node: {{ node }}, Host: {{ host }}, Cloneid: {{ cloneid }}"
-
-    - name: Determine Hostname
-      set_fact:
-        yeppers: "ubuntu-{{ lookup('password', '/dev/null chars=ascii_lowercase,digits length=8') }}"
-
-    - name: Determine the next available LXC ID across all nodes
-      set_fact:
-        next_lxc_id: "{{ range(100, 1000) | difference(existing_lxc_ids.stdout_lines | map('int')) | first }}"
+        var: next_lxc_id
 
     - name: Display the next available LXC ID
       debug:
