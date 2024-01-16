@@ -33,9 +33,8 @@
     
     - name: Find next available LXC ID
       set_fact:
-        next_lxc_id: "{{ item }}"
-      with_sequence: start=100
-      when: item not in existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list
+        next_lxc_id: "{{ range(100, 1000) | difference(existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list) | first }}"
+      when: existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list | length < 900
 
     - name: Display the next available LXC ID
       debug:
