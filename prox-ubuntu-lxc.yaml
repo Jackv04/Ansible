@@ -13,5 +13,4 @@
 - name: Display VMIDs
   hosts: node1
   tasks:  
-    debug:
-      var: "{{ existing_ids }}"
+    msg: "{{ existing_ids }}"
