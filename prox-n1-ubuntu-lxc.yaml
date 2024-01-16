@@ -31,11 +31,8 @@
         node: "{{ 'node' + NODE_CHOICE }}"
         host: "{{ '10.10.0.' + NODE_CHOICE + '0' }}"
         cloneid: "{{ 900 + NODE_CHOICE | int }}"
-    
-    - name: Find next available LXC ID
-      set_fact:
         next_lxc_id: "{{ (range(100, 1000) | difference(existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list) | first) | int }}"
-      when: existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list | length < 900 and next_lxc_id is not defined
+      when: existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | map('int') | list | length < 900
 
     - name: Display the next available LXC ID
       debug:
