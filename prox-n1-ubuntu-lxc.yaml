@@ -19,8 +19,9 @@
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: "{{ host }}"
         node: "{{ node }}"
-        vmid: "all"
+        vmid: "{{ item }}"
       register: existing_lxc_vm_facts
+      with_items: "{{ range(100, 1000) | list }}"  # Assuming your VM IDs are in the range 100-999
 
 - name: Proxmox LXC Cloning
   hosts: "{{ 'node' + NODE_CHOICE }}"
@@ -30,7 +31,7 @@
         node: "{{ 'node' + NODE_CHOICE }}"
         host: "{{ '10.10.0.' + NODE_CHOICE + '0' }}"
         cloneid: "{{ 900 + NODE_CHOICE | int }}"
-        existing_lxc_ids: "{{ existing_lxc_vm_facts.virtualmachines.keys() | map('int') | list }}"
+        existing_lxc_ids: "{{ existing_lxc_vm_facts.results | map(attribute='ansible_facts.virtualmachine.id') | list }}"
 
     - name: Display configured values
       debug:
