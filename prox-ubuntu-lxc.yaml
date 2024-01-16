@@ -35,7 +35,7 @@
         api_user: root@pam
         api_password: "{{ lookup('env', 'PASSWORD') }}"
         api_host: 10.10.{{ NODE }}0
-        hostname: "{{ HOSTNAME_CHOICE }}"
+        hostname: "{{ HOSTNAME }}"
         clone: 102
         storage: local
         timeout: 180
@@ -50,7 +50,7 @@
         state: started
 
     - name: get LXC container ID
-      ansible.builtin.shell: pct list | grep "{{ HOSTNAME_CHOICE }}" | awk '{ print $1 }'
+      ansible.builtin.shell: pct list | grep "{{ HOSTNAME }}" | awk '{ print $1 }'
       register: thelxcid
 
     - name: debug LXC container ID
@@ -75,7 +75,7 @@
         msg: |
           ### Your LXC Container is READY!! ###
           --------------------------------------
-          `Container`: "{{ HOSTNAME_CHOICE }}"
+          `Container`: "{{ HOSTNAME }}"
           {% if theip is defined %}
           `IP ADDRESS`: "{{ theip.stdout }}"
           'URL': ssh://user@{{ theip.stdout }}
