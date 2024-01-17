@@ -38,7 +38,7 @@
         hostname: "{{ HOSTNAME }}"
         clone: 90{{ NODE }}
         clone_type: full
-        storage: local
+        storage: local-lvm
         timeout: 300
 
     - name: Start LXC container
