@@ -96,3 +96,8 @@
       ansible.builtin.apt:
       Update: yes
       Upgrade: yes
+
+    - name: Install Basics
+      ansible.builtin.apt:
+        name: software-properties-common
+        state: present
