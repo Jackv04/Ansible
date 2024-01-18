@@ -91,3 +91,8 @@
         link_names: 0
         parse: 'none'
       ignore_errors: true
+
+    - name: Update & Upgrade
+      ansible.builtin.apt:
+      Update: yes
+      Upgrade: yes
